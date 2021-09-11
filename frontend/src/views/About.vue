@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Navbar :linkHighlight="'home'" />
+    <Navbar :linkHighlight="'about'" />
   </div>
 </template>
 <script>
