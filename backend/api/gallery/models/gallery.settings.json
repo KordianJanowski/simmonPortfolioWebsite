@@ -1,0 +1,25 @@
+{
+  "kind": "collectionType",
+  "collectionName": "galleries",
+  "info": {
+    "name": "gallery",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "images": {
+      "type": "json"
+    },
+    "timeToDelete": {
+      "type": "datetime"
+    },
+    "code": {
+      "type": "uid"
+    }
+  }
+}

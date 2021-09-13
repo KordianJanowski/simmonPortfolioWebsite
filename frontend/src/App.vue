@@ -11,4 +11,5 @@
   color: white;
   background: #1F2937;
 }
+/* created by : KordianJanowski & StanisławSztrajt © */
 </style>
