@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Navbar :linkHighlight="'portfolio'" />
+    <Navbar />
   </div>
 </template>
 <script>

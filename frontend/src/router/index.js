@@ -1,6 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import Home from '../views/Home.vue'
-import LoginPanel from '../views/LoginPanel.vue'
+import Login from '../views/Login.vue'
 import Download from '../views/Download.vue'
 import Portfolio from '../views/Portfolio.vue'
 import About from '../views/About.vue'
@@ -13,9 +13,9 @@ const routes = [
     component: Home
   },
   {
-    path: '/panel',
-    name: 'LoginPanel',
-    component: LoginPanel
+    path: '/login',
+    name: 'Login',
+    component: Login
   },
   {
     path: '/download',
