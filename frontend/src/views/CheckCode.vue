@@ -5,7 +5,7 @@
       <div v-if="!isCheckedSuccessfullyGallery" class="w-full h-screen bg-gray-900 flex justify-center items-center">
         <div class="w-full max-w-sm m-10 sm:m-0 overflow-hidden bg-white py-10 rounded-lg shadow-md">
           <div class="px-6 py-4">
-            <h2 class="text-3xl font-bold text-center mb-3 text-gray-70">Do pobrania</h2>
+            <h2 class="text-3xl font-bold text-center mb-3 text-gray-70 text-black">Do pobrania</h2>
             <p class="mt-1 text-center text-gray-500">Poniżej podaj twój kod dostępu aby pobrać wybrane zdjęcia</p>
             <form @submit.prevent="checkCode()">
               <div class="w-full mt-4">
@@ -29,11 +29,11 @@
             <div v-show="codeError">Wprowadzono nieprawidłowy kod</div>
           </div>
         </div>
-        <img class="h-96 ml-32 hidden xl:block" src="../assets/logingraphic.svg">
+        <img class="h-96 ml-32 hidden xl:block" src="../assets/svg/logingraphic.svg">
       </div>
       <div v-else class="w-full h-screen bg-gray-900 flex justify-center items-center">
         <div>uzyty kod: {{ gallery.code }}</div>
-        <div @click="hideCheckedSuccessfullyGallery">wroc</div>
+        <button @click="hideCheckedSuccessfullyGallery">wroc</button>
         <div>Wyniki :</div>
           <div class="grid grid-cols-1 2xl:grid-cols-2 h-auto">
             <div
@@ -86,11 +86,12 @@ export default {
         },this.setTimeoutTime)
         return this.codeError = true
       })
+    },
+    hideCheckedSuccessfullyGallery(){
+      this.isCheckedSuccessfullyGallery = false;
+      this.gallery = {}
     }
   },
-  hideCheckedSuccessfullyGallery(){
-    this.isCheckedSuccessfullyGallery = false;
-    this.gallery = {}
-  }
+
 }
 </script>
