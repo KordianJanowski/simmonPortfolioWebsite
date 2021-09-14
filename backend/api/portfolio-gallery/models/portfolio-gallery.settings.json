@@ -1,0 +1,19 @@
+{
+  "kind": "collectionType",
+  "collectionName": "portfolio_galleries",
+  "info": {
+    "name": "portfolioGallery",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "image": {
+      "type": "string"
+    }
+  }
+}

@@ -39,7 +39,7 @@
         </div>
       </div>
     </div>
-a
+
     <button @click="addGallery">Dodaj galerie</button>
   </div>
 </template>

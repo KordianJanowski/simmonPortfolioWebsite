@@ -3,6 +3,7 @@ import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
 import CheckCode from '../views/CheckCode.vue'
 import AddGallery from '../views/AddGallery.vue'
+import AddPortfolioImage from '../views/AddPortfolioImage.vue'
 import Portfolio from '../views/Portfolio.vue'
 import About from '../views/About.vue'
 import Contact from '../views/Contact.vue'
@@ -27,6 +28,11 @@ const routes = [
     path: '/add-gallery',
     name: 'AddGallery',
     component: AddGallery
+  },
+  {
+    path: '/add-portfolio-image',
+    name: 'AddPortfolioImage',
+    component: AddPortfolioImage
   },
   {
     path: '/portfolio',
