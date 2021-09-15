@@ -25,11 +25,16 @@
 </template>
 
 <script>
+import axios from 'axios';
+import API_URL from '../API_URL'
+
 export default {
   data(){
     return{
       image: '',
-      url: ''
+      url: '',
+
+      jwt: this.$cookies.get('jwt')
     }
   },
   methods: {
@@ -44,7 +49,7 @@ export default {
       this.url = '';
       this.imageUrl = '';
     },
-    addImage(){
+    async addImage(){
       let isPostedImages = false;
 
       const data = new FormData()
@@ -59,15 +64,15 @@ export default {
         data
       )
       .then(async res => {
-        console.log(res.data);
-        await this.imageUrl.push(res.data.url);
-        if(this.imageUrl.length === this.images.length) isPostedImages = true;
+        console.log(res)
+        this.imageUrl = res.data.url;
+        isPostedImages = true;
       })
       .catch(err => console.log(err))
 
       if(isPostedImages){
-        await axios.post(`${API_URL}/galleries`,
-        { images: this.imageUrl, code: this.codeValue, timeToDelete },
+        await axios.post(`${API_URL}/portfolio-images`,
+        { image: this.imageUrl },
         { headers: { Authorization: `Bearer ${this.jwt}` } }
         )
         .then(() => this.$router.push('/panel'))

@@ -1,9 +1,8 @@
 {
   "kind": "collectionType",
-  "collectionName": "portfolio_galleries",
+  "collectionName": "portfolio_images",
   "info": {
-    "name": "portfolioGallery",
-    "description": ""
+    "name": "portfolio-image"
   },
   "options": {
     "increments": true,

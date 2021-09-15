@@ -37,16 +37,17 @@
         <div>Wyniki :</div>
           <div class="grid grid-cols-1 2xl:grid-cols-2 h-auto">
             <div
-              v-for="(image, index) in gallery.images"
-              :key="index"
+              v-for="image in gallery.images"
+              :key="image.name"
               class="bg-cover bg-no-repeat bg-center grid-cols-1 m-2 h-64 w-96
                flex flex-col"
-              :style="{ backgroundImage: 'url(' + image + ')' }"
+              :style="{ backgroundImage: 'url(' + image.url + ')' }"
             >
-              <a :href="image" download class="h-48 w-48 bg-white text-black">download</a>
-            </div>
+            <a :href="image.url" class="h-48 w-48 bg-white text-black" @click.prevent="downloadSingleImage(image.url, image.name)">download</a>
           </div>
         </div>
+      </div>
+      <button @click="downloadAllImages">download all</button>
     </div>
   </div>
 </template>
@@ -87,10 +88,35 @@ export default {
         return this.codeError = true
       })
     },
+    downloadSingleImage(url, name){
+      axios.get(url, { responseType: 'blob' })
+        .then(response => {
+          const blob = new Blob([response.data], { type: 'image/png, image/jpeg' })
+          const link = document.createElement('a')
+          link.href = URL.createObjectURL(blob)
+          link.download = name
+          link.click()
+          URL.revokeObjectURL(link.href)
+        }).catch(console.error)
+    },
+    downloadAllImages(){
+      this.gallery.images.forEach  (image => {
+        axios.get(image.url, { responseType: 'blob' })
+        .then(response => {
+          const blob = new Blob([response.data], { type: 'image/png, image/jpeg' })
+          const link = document.createElement('a')
+          link.href = URL.createObjectURL(blob)
+          link.download = image.name
+          link.click()
+          URL.revokeObjectURL(link.href)
+        }).catch(console.error)
+      })
+    },
     hideCheckedSuccessfullyGallery(){
       this.isCheckedSuccessfullyGallery = false;
       this.gallery = {}
-    }
+    },
+
   },
 
 }
