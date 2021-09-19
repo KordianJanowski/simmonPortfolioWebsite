@@ -2,12 +2,12 @@
   <div>
     <Navbar />
     <div class="container w-4/5 md:w-3/5 mx-auto">
-      <section class="bg-transparent mt-20 lg:mt-32 2xl:mt-40 dark:bg-gray-800">
+      <section class="bg-transparent mt-20 lg:mt-32 2xl:mt-40">
         <div class="py-8 mx-auto">
           <div class="items-center lg:flex">
             <div class="lg:w-1/2">
-              <h2 class="text-3xl font-bold text-white dark:text-gray-100">Kim jestem?</h2>
-              <p class="my-4 text-gray-100 dark:text-gray-400 text-lg lg:max-w-md">
+              <h2 class="text-3xl font-bold text-white">Kim jestem?</h2>
+              <p class="my-4 text-gray-100 text-lg lg:max-w-md">
                 Cześć, jestem... Lorem ipsum, dolor sit amet consectetur adipisicing elit. Illum in sed non alias, fugiat, commodi nemo ut fugit corrupti dolorem sequi ex veniam consequuntur id, maiores beatae ipsa omnis aliquam?
               </p>
               <SocialMediaIcons />
