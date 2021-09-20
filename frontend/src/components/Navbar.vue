@@ -7,14 +7,14 @@
       >
         <img class="w-40" src="../assets/logo.png" alt="Simmon logo">
       </router-link>
-      <div class="flex flex-row">
+      <div class="flex flex-row items-center">
         <div>
-          <div 
-            class="h-screen w-full top-0 left-0 bg-gray-800 flex-col items-center justify-between py-52 fixed z-30 lg:bg-transparent lg:flex lg:flex-row lg:mx-6 lg:static lg:h-auto lg:w-auto lg:p-0" 
+          <div  
+            class="lg:flex"
             :class="[navbarExpanded ? 'flex' : 'hidden']"
           >
             <button
-              class="lg:hidden text-white hover:text-gray-300 focus:outline-none focus:text-gray-300 absolute top-5 right-5"
+              class="lg:hidden text-white hover:text-gray-300 focus:outline-none focus:text-gray-300 z-40 fixed top-5 right-5"
               :class="[navbarExpanded ? 'flex' : 'hidden']"
               aria-label="toggle menu"
               type="button"

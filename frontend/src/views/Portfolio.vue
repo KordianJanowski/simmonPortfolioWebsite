@@ -2,7 +2,7 @@
   <div>
     <Navbar />
     <div class="container flex flex-col items-center mx-auto my-32">
-      <div class="flex flex-row w-84 justify-between items-center border-b-2 border-gray-600 shadow-md mb-5">
+      <div class="flex flex-row w-84 justify-between items-center border-b border-gray-600 shadow-md mb-5">
         <input 
           type="text"
           class="text-2xl w-11/12 bg-transparent focus:outline-none p-1"

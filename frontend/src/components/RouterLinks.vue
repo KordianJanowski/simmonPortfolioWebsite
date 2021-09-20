@@ -1,5 +1,9 @@
 <template>
-  <div :class="[className === 'footer' ? 'grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5' : '']">
+  <div :class="[
+      className === 'footer' ? 'grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5' : '', 
+      className === 'navbar' ? 'h-screen w-full top-0 left-0 bg-gray-800 flex flex-col items-center justify-between py-52 fixed z-30 lg:bg-transparent lg:flex lg:flex-row lg:mx-6 lg:static lg:h-auto lg:w-auto lg:p-0' : ''
+    ]"
+  >
     <router-link
       v-for="link in navLinks"
       :key="link.text"
