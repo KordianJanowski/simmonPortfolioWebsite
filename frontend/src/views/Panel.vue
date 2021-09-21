@@ -1,23 +1,19 @@
 <template>
   <div>
-    <div v-if="!isDeleteGalleryLayer && !isExtensionGalleryLayer" class="flex flex-row">
+    <div v-if="!isDeleteGalleryLayer && !isExtensionGalleryLayer && !isDeletePortfolioImageLayer" class="flex flex-row">
       <div class="fixed flex flex-col w-64 min-h-screen h-full px-4 py-8 bg-gray-700 border-gray-600 border-r overflow-y-auto">
-        <h2 class="mx-4 text-3xl font-semibold">Panel</h2>
-        <div class="flex flex-col justify-between flex-1 mt-3 2xl:mt-6">
+        <img class="w-3/5 ml-2" src="../assets/panel.png" alt="Panel">
+        <div class="flex flex-col justify-between flex-1">
           <nav>
-            <a class="flex items-center px-4 py-2 mt-2 2xl:mt-5 transition-colors duration-200 transform rounded-md hover:bg-gray-200 hover:text-gray-700" href="#">
-              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M15 5V7M15 11V13M15 17V19M5 5C3.89543 5 3 5.89543 3 7V10C4.10457 10 5 10.8954 5 12C5 13.1046 4.10457 14 3 14V17C3 18.1046 3.89543 19 5 19H19C20.1046 19 21 18.1046 21 17V14C19.8954 14 19 13.1046 19 12C19 10.8954 19.8954 10 21 10V7C21 5.89543 20.1046 5 19 5H5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
+            <button 
+              v-for="subpage in subpageButtons"
+              :key="subpage.name"
+              @click="activeSubpage = subpage.name.toLowerCase()" 
+              class="flex w-full items-center px-4 py-2 mt-1 2xl:mt-5 transition-colors duration-200 transform rounded-md hover:bg-gray-600" href="#">
+              <img class="w-6 h-6" :src="require(`../assets/svg/panel/${subpage.svg}.svg`)" alt="Icon">
 
-              <span class="mx-4 font-medium">Kody</span>
-            </a>
-            <a class="flex items-center px-4 py-2 mt-2 2xlmt-5 transition-colors duration-200 transform rounded-md hover:bg-gray-200 hover:text-gray-700" href="#">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
-              <span class="mx-4 font-medium">Portfolio</span>
-            </a>
+              <span class="mx-4 font-medium">{{ subpage.name }}</span>
+            </button>
             <hr class="my-4 2xl:my-6" />
             <RouterLinks :className="'panel'" />
           </nav>
@@ -35,23 +31,23 @@
           </div>
         </div>
       </div>
-      <div class="p-20 flex flex-col w-full ml-64">
+      <div v-if="activeSubpage === 'kody'" class="p-20 flex flex-col w-full ml-64">
         <h1 class="text-5xl font-bold">Kody</h1>
         <hr class="my-10 border-gray-700">
         <div class="flex flex-row flex-wrap">
-          <router-link to="/add-gallery" class="flex flex-col justify-center items-center w-52 h-32 bg-gray-700 hover:bg-gray-600 rounded shadow-md cursor-pointer mr-7">
+          <router-link to="/add-gallery" class="flex flex-col justify-center items-center w-52 h-32 bg-gray-700 hover:bg-gray-600 rounded shadow-md cursor-pointer mb-7 mr-7">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mb-1" viewBox="0 0 20 20" fill="currentColor">
               <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
             </svg>
             Dodaj kod
           </router-link>
-          <router-link to="/check-code" class="flex flex-col justify-center items-center w-52 h-32 bg-gray-700 hover:bg-gray-600 rounded shadow-md cursor-pointer mr-7">
+          <router-link to="/check-code" class="flex flex-col justify-center items-center w-52 h-32 bg-gray-700 hover:bg-gray-600 rounded shadow-md cursor-pointer mb-7 mr-7">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mb-1" viewBox="0 0 20 20" fill="currentColor">
               <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
             </svg>
             Sprawdź kod
           </router-link>
-          <div class="flex flex-col justify-center items-center w-52 h-32 bg-gray-700 rounded shadow-md mr-7">
+          <div class="flex flex-col justify-center items-center w-52 h-32 bg-gray-700 rounded shadow-md mb-7 mr-7">
             <span class="font-semibold text-4xl"> {{ this.codes.length }} </span>
             Ilość kodów
           </div>
@@ -59,7 +55,7 @@
         <hr class="my-10 border-gray-700">
         <div class="flex flex-col">
           <h3 class="text-3xl font-semibold mb-6">Lista kodów</h3>
-          <div v-if="this.codes.legth === 0" class="flex w-full max-w-sm overflow-hidden bg-gray-700 rounded-lg shadow-md">
+          <div v-if="this.codes.length === 0" class="flex w-full max-w-sm overflow-hidden bg-gray-700 rounded-lg shadow-md">
             <div class="flex items-center justify-center w-12 bg-blue-500">
               <svg class="w-6 h-6 text-white fill-current" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
                 <path d="M20 3.33331C10.8 3.33331 3.33337 10.8 3.33337 20C3.33337 29.2 10.8 36.6666 20 36.6666C29.2 36.6666 36.6667 29.2 36.6667 20C36.6667 10.8 29.2 3.33331 20 3.33331ZM21.6667 28.3333H18.3334V25H21.6667V28.3333ZM21.6667 21.6666H18.3334V11.6666H21.6667V21.6666Z"/>
@@ -80,7 +76,7 @@
                 :to="{ name: 'Gallery', params: { code: code.code }}"
                 class="flex flex-col justify-center items-center "
               >
-                <span>Użytkownik</span>
+                <span>{{ code.timeToDelete.slice(0, 10) }}</span>
                 <span class="font-bold text-2xl text-blue-400">{{ code.code }}</span>
               </router-link>
               <div class="flex flex-row w-full justify-end items-center -mt-1">
@@ -100,6 +96,114 @@
           </div>
         </div>
       </div>
+      <div v-else-if="activeSubpage === 'portfolio'" class="p-20 flex flex-col w-full ml-64">
+        <h1 class="text-5xl font-bold">Portfolio</h1>
+        <hr class="my-10 border-gray-700">
+        <div class="flex flex-row flex-wrap">
+          <router-link to="/add-portfolio-image" class="flex flex-col justify-center items-center w-52 h-32 bg-gray-700 hover:bg-gray-600 rounded shadow-md cursor-pointer mr-7">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mb-1" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+            </svg>
+            Dodaj zdjęcie
+          </router-link>
+          <div class="flex flex-col justify-center items-center w-52 h-32 bg-gray-700 rounded shadow-md mr-7">
+            <span class="font-semibold text-4xl"> {{ this.portfolioImages.length }} </span>
+            Ilość zdjęć
+          </div>
+        </div>
+        <hr class="my-10 border-gray-700">
+        <div class="flex flex-col">
+          <h3 class="text-3xl font-semibold mb-6">Lista zdjęć</h3>
+          <div v-if="this.portfolioImages.length === 0" class="flex w-full max-w-sm overflow-hidden bg-gray-700 rounded-lg shadow-md">
+            <div class="flex items-center justify-center w-12 bg-blue-500">
+              <svg class="w-6 h-6 text-white fill-current" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 3.33331C10.8 3.33331 3.33337 10.8 3.33337 20C3.33337 29.2 10.8 36.6666 20 36.6666C29.2 36.6666 36.6667 29.2 36.6667 20C36.6667 10.8 29.2 3.33331 20 3.33331ZM21.6667 28.3333H18.3334V25H21.6667V28.3333ZM21.6667 21.6666H18.3334V11.6666H21.6667V21.6666Z"/>
+              </svg>
+            </div>
+            <div class="px-4 py-2">
+              <span class="font-semibold text-blue-400">Info</span>
+              <p class="text-sm text-gray-200">Na ten moment nie posiadasz żadnych zdjęć.</p>
+            </div>
+          </div>
+          <div class="flex flex-row flex-wrap">
+            <div
+              class="bg-gray-700 rounded shadow-md mr-7 mb-10"
+              v-show="portfolioImages.length !== 0"
+              v-for="(imageUrl, index) in portfolioImages"
+              :key="index"
+            >
+              <div class="flex flex-col w-full justify-end items-center">
+                <div
+                  class="w-72 h-72 bg-center bg-cover bg-no-repeat m-2 rounded shadow-md"
+                  :style="{ backgroundImage: 'url(' + imageUrl.image + ')' }"
+                >
+                </div>
+                <div class="flex w-full justify-end">
+                  <button @click="toggleDeletePortfolioImageLayer(imageUrl.id)" class="hover:text-gray-300 mb-2 mr-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div v-else class="p-20 flex flex-col w-full ml-64">
+        <h1 class="text-5xl font-bold">Dysk</h1>
+        <hr class="my-10 border-gray-700">
+        <div class="flex flex-row flex-wrap">
+          <router-link to="/add-drive-image" class="flex flex-col justify-center items-center w-52 h-32 bg-gray-700 hover:bg-gray-600 rounded shadow-md cursor-pointer mr-7">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mb-1" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+            </svg>
+            Dodaj zdjęcie
+          </router-link>
+          <div class="flex flex-col justify-center items-center w-52 h-32 bg-gray-700 rounded shadow-md mr-7">
+            <span class="font-semibold text-4xl"> {{ this.driveImages.length }} </span>
+            Ilość zdjęć
+          </div>
+        </div>
+        <hr class="my-10 border-gray-700">
+        <div class="flex flex-col">
+          <h3 class="text-3xl font-semibold mb-6">Lista zdjęć</h3>
+          <div v-if="this.driveImages.length === 0" class="flex w-full max-w-sm overflow-hidden bg-gray-700 rounded-lg shadow-md">
+            <div class="flex items-center justify-center w-12 bg-blue-500">
+              <svg class="w-6 h-6 text-white fill-current" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 3.33331C10.8 3.33331 3.33337 10.8 3.33337 20C3.33337 29.2 10.8 36.6666 20 36.6666C29.2 36.6666 36.6667 29.2 36.6667 20C36.6667 10.8 29.2 3.33331 20 3.33331ZM21.6667 28.3333H18.3334V25H21.6667V28.3333ZM21.6667 21.6666H18.3334V11.6666H21.6667V21.6666Z"/>
+              </svg>
+            </div>
+            <div class="px-4 py-2">
+              <span class="font-semibold text-blue-400">Info</span>
+              <p class="text-sm text-gray-200">Na ten moment nie posiadasz żadnych zdjęć.</p>
+            </div>
+          </div>
+          <div class="flex flex-row flex-wrap">
+            <div
+              class="bg-gray-700 rounded shadow-md mr-7 mb-10"
+              v-show="driveImages.length !== 0"
+              v-for="(imageUrl, index) in driveImages"
+              :key="index"
+            >
+              <div class="flex flex-col w-full justify-end items-center">
+                <div
+                  class="w-72 h-72 bg-center bg-cover bg-no-repeat m-2 rounded shadow-md"
+                  :style="{ backgroundImage: 'url(' + imageUrl.image + ')' }"
+                >
+                </div>
+                <div class="flex w-full justify-end">
+                  <button @click="toggleDeleteGalleryLayer(image.image)" class="hover:text-gray-300 mb-2 mr-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <DeleteGalleryLayer
       :codeId="codeId"
@@ -115,6 +219,12 @@
       @extension-gallery="extensionGallery"
       @toggle-extension-gallery-layer="toggleExtensionGalleryLayer"
     />
+
+    <DeletePortfolioImageLayerVue 
+      v-else-if="isDeletePortfolioImageLayer"
+      @toggle-delete-portfolio-image-layer="toggleDeletePortfolioImageLayer"
+      @delete-portfolio-image="deletePortfolioImage"
+    />
   </div>
 </template>
 <script>
@@ -122,6 +232,7 @@
 import RouterLinks from '../components/RouterLinks.vue'
 import DeleteGalleryLayer from '../components/DeleteGalleryLayer.vue'
 import ExtensionGalleryLayer from '../components/ExtensionGalleryLayer.vue'
+import DeletePortfolioImageLayerVue from '../components/DeletePortfolioImageLayer.vue.vue'
 
 import API_URL from '../API_URL'
 import axios from 'axios'
@@ -134,16 +245,26 @@ export default {
 
       timeToDelete: 604800000,
       codes: [],
+      portfolioImages: [],
+      driveImages: [],
       codeId: '',
-      codeCode: '',
+      portfolioImageId: '',
       isDeleteGalleryLayer: false,
-      isExtensionGalleryLayer: false
+      isExtensionGalleryLayer: false,
+      isDeletePortfolioImageLayer: false,
+      activeSubpage: 'kody',
+      subpageButtons: [
+        { name: "Kody", svg: "ticket" },
+        { name: "Portfolio", svg: "image" },
+        { name: "Dysk", svg: "drive" }
+      ]
     }
   },
   components: {
     RouterLinks,
     DeleteGalleryLayer,
-    ExtensionGalleryLayer
+    ExtensionGalleryLayer,
+    DeletePortfolioImageLayerVue
   },
   async created() {
     if(!this.ISjwt){
@@ -154,6 +275,11 @@ export default {
     { headers: { Authorization: `Bearer ${this.jwt}` } }
     ).then(response => {
       this.codes = response.data
+    })
+
+    await axios.get(`${API_URL}/portfolio-images`)
+    .then(response => {
+      this.portfolioImages = response.data
     })
   },
   methods: {
@@ -166,7 +292,10 @@ export default {
       .then(res => console.log(res))
       .catch(err => console.log(err));
 
-      window.location.reload()
+      const index = this.codes.findIndex(el => el.id === this.codeId)
+      this.codes.splice(index, 1)
+
+      this.toggleDeleteGalleryLayer('')
     },
     async extensionGallery() {
       let gallery = {}
@@ -180,10 +309,14 @@ export default {
       await axios.put(`${API_URL}/galleries/${this.codeId}`,
       { timeToDelete: newTimeToDelete },
       { headers: { Authorization: `Bearer ${this.jwt}` } })
-      .then(res => console.log(res))
+      .then(res => {
+        const index = this.codes.findIndex(el => el.id === this.codeId)
+        this.codes[index].timeToDelete = res.data.timeToDelete
+      })
       .catch(err => console.log(err));
 
-      window.location.reload()
+
+      this.toggleExtensionGalleryLayer('')
     },
     async logout(){
       await this.$cookies.remove('jwt');
@@ -200,6 +333,22 @@ export default {
       this.codeCode = code;
       this.isExtensionGalleryLayer = !this.isExtensionGalleryLayer;
     },
+    async deletePortfolioImage() {
+      await axios.delete(`${API_URL}/portfolio-images/${this.portfolioImageId}`,
+      { headers: { Authorization: `Bearer ${this.jwt}` } })
+      .then(res => console.log(res))
+      .catch(err => console.log(err));
+      
+      const index = this.portfolioImages.findIndex(el => el.id === this.portfolioImageId)
+      this.portfolioImages.splice(index, 1)
+
+      this.toggleDeletePortfolioImageLayer('')
+      
+    },
+    toggleDeletePortfolioImageLayer(id){
+      this.portfolioImageId = id
+      this.isDeletePortfolioImageLayer = !this.isDeletePortfolioImageLayer;
+    }
   },
 }
 </script>

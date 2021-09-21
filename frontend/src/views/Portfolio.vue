@@ -26,7 +26,7 @@
         <div v-show="imagesUrl.length === 0" class="flex flex-col items-center justify-center mt-12">
           <img 
             class="w-1/2"
-            src="../assets/svg/notFound.svg" 
+            src="../assets/svg/noImagesFound.svg" 
             alt="No images found"
           >
           <span class="text-2xl md:text-3xl mt-10 text-gray-300">Nie znaleziono żadnych zdjęć</span>
@@ -56,7 +56,6 @@ export default {
   async created(){
     await axios.get(`${API_URL}/portfolio-images`)
     .then(res => {
-      console.log(res)
       this.imagesUrl = res.data
     })
     .catch(err => console.log(err))

@@ -3,7 +3,7 @@
     <Navbar />
     <div class="flex w-full justify-center mx-auto my-32">
       <form @submit.prevent="addImage" class="container w-11/12 sm:max-w-3xl bg-gray-700 rounded-md shadow-md p-5">
-        <h1 class="text-3xl font-semibold text-blue-400 mb-5">Dodaj zdjęcie do portfolio</h1>
+        <h1 class="text-3xl font-semibold text-blue-400 mb-5">Dodaj zdjęcie do dysku</h1>
         
         <div class="flex flex-col">
           <label>Dodaj zdjęcie</label>
@@ -16,7 +16,7 @@
           >
         </div>
 
-        <div class="flex flex-col mt-5">
+        <div class="flex flex-col my-5">
           <label class="mb-1 pl-2 w-full">Podgląd zdjęcia</label>
           <div
             class="bg-gray-800 bg-cover bg-no-repeat bg-center ml-1 h-72 w-full sm:w-72 rounded-md shadow-md"
@@ -31,22 +31,8 @@
               </svg>
             </div>
           </div>
-        </div>
 
-        <div class="flex flex-col my-5">
-          <label>Opis</label>
-          <textarea 
-            class="py-2 px-3 text-xl w-full sm:w-3/4 rounded shadow-md bg-gray-800 focus:outline-none"
-            placeholder="Opis zdjęcia"
-            required
-            v-model="descriptionValue" 
-            maxlength="500"
-            minlength="3"
-            cols="20" 
-            rows="10"
-          ></textarea>
         </div>
-
         <input 
           type="submit" 
           value="Dodaj zdjęcie"
@@ -72,7 +58,6 @@ export default {
   },
   data(){
     return{
-      descriptionValue: '',
       image: '',
       url: '',
 
@@ -120,7 +105,7 @@ export default {
 
       if(isPostedImages){
         await axios.post(`${API_URL}/portfolio-images`,
-        { image: this.imageUrl, description: this.descriptionValue },
+        { image: this.imageUrl },
         { headers: { Authorization: `Bearer ${this.jwt}` } }
         )
         .then(() => this.$router.push('/panel'))

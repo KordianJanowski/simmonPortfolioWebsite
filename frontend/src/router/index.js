@@ -3,8 +3,9 @@ import Home from '../views/Home.vue'
 import CheckCode from '../views/CheckCode.vue'
 import Gallery from '../views/Gallery.vue'
 import AddGallery from '../views/AddGallery.vue'
-import AddPortfolioImage from '../views/AddPortfolioImage.vue'
 import Portfolio from '../views/Portfolio.vue'
+import AddPortfolioImage from '../views/AddPortfolioImage.vue'
+import AddDriveImages from '../views/AddDriveImages.vue'
 import About from '../views/About.vue'
 import Contact from '../views/Contact.vue'
 import Login from '../views/Login.vue'
@@ -38,14 +39,19 @@ const routes = [
     component: AddGallery
   },
   {
+    path: '/portfolio',
+    name: 'Portfolio',
+    component: Portfolio
+  },
+  {
     path: '/add-portfolio-image',
     name: 'AddPortfolioImage',
     component: AddPortfolioImage
   },
   {
-    path: '/portfolio',
-    name: 'Portfolio',
-    component: Portfolio
+    path: '/add-drive-images',
+    name: 'AddDriveImages',
+    component: AddDriveImages
   },
   {
     path: '/about',

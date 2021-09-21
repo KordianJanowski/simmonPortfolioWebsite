@@ -1,0 +1,9 @@
+{
+  "navbar": {
+    "main-page": "Home",
+    "portfolio": "Portfolio",
+    "about-me": "About me",
+    "to-download": "To download",
+    "contact": "Contact"
+  }
+}

@@ -1,9 +1,8 @@
 <template>
   <div>
+    <Navbar />
     <header>
-      <Navbar />
-
-      <div class="h-screen flex justify-between mt-10 xl:mt-0">
+      <div class="lg:h-screen flex justify-between mt-14 xl:mt-0">
         <div class="container px-6 py-16 mx-auto items-center lg:flex">
           <div class="w-full lg:w-1/2">
             <div class="lg:max-w-lg">
@@ -20,16 +19,31 @@
         </div>
       </div>
     </header>
+
+    <AboutComponent :aditionalClass="'lg:-mt-20'" />
+
+    <ContactComponent :aditionalClass="'-mt-6'" />
+
     <Footer />
   </div>
 </template>
 <script>
-import Footer from '../components/Footer.vue'
 import Navbar from '../components/Navbar'
+import AboutComponent from '../components/AboutComponent.vue'
+import ContactComponent from '../components/ContactComponent.vue'
+import Footer from '../components/Footer.vue'
+
 export default {
+  data() {
+    return {
+      images: []
+    }
+  },
   components: {
     Navbar,
+    AboutComponent,
+    ContactComponent,
     Footer,
-  }
+  },
 }
 </script>

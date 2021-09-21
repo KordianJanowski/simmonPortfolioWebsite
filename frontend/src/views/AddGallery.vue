@@ -1,43 +1,94 @@
 <template>
   <div>
     <Navbar />
-    <div class="mt-32">
-      <label for="">kod</label>
-      <input type="" v-model="codeValue">
-      <div v-show="codeError">wprowadzony kod juz istnieje</div>
-      <textarea name="" v-model="descriptionValue" maxlength="500" id="" cols="30" rows="10"></textarea>
+    <div class="flex w-full justify-center mx-auto my-32">
+      <form @submit.prevent="addGallery" class="container w-11/12 sm:max-w-3xl bg-gray-700 rounded-md shadow-md p-5">
+        <h1 class="text-3xl font-semibold text-blue-400 mb-5">Dodaj kod</h1>
 
-      <div v-for="time in expirationOptions " :key="time" @click="setTimeValue(time.asNumber)">
-        {{ time.asString }}
-      </div>
+        <div class="flex flex-col">
+          <label>Kod</label>
+          <input
+            class="py-2 px-3 text-xl w-full sm:w-2/3 rounded shadow-md bg-gray-800 focus:outline-none"
+            type="text"
+            required
+            minlength="3"
+            maxlength="15"
+            v-model="codeValue"
+            placeholder="Np. K5F4j2H3fj (bez spacji)"
+          >
+        </div>
+        <Alert
+          v-show="codeError"
+          :alertText="'Wprowadzony kod już istnieje'"
+        />
 
-      <label for="">dodaj zdjecia</label>
-      <input
-        type="file"
-        accept="image/png, image/jpeg"
-        required
-        multiple
-        class=""
-        @change="onFileChange($event)"
-      >
-      <div class="grid grid-cols-1 2xl:grid-cols-2 h-auto">
-        <div
-          v-for="(url, index) in urls"
-          :key="url"
-          class="bg-cover bg-no-repeat bg-center grid-cols-1 m-2 h-72 flex flex-col"
-          :style="{ backgroundImage: 'url(' + url + ')' }"
-        >
-          <div class="flex justify-end items-end h-full">
-            <svg xmlns="http://www.w3.org/2000/svg"
-              @click="removeImage(index)"
-              class="h-10 w-10 text-red-600 button-animation-hover cursor-pointer " fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-            </svg>
+        <div class="flex flex-col mt-6">
+          <label>Opis</label>
+          <textarea
+            class="py-2 px-3 text-xl w-full sm:w-3/4 rounded shadow-md bg-gray-800 focus:outline-none"
+            placeholder="Np. Adam Nowak, sesja samochodowa, 12.09.2021"
+            required
+            v-model="descriptionValue"
+            maxlength="500"
+            minlength="3"
+            cols="20"
+            rows="10"
+          ></textarea>
+        </div>
+
+
+        <div class="flex flex-col my-6">
+          <label>Czas trwania</label>
+          <select
+            @change="setTimeValue($event.target.value)"
+            ref="extensionSelect"
+            required
+            class="py-2 px-3 text-xl w-full sm:w-2/3 rounded shadow-md bg-gray-800 focus:outline-none">
+            <option disabled selected hidden value="">Wybierz</option>
+            <option
+              v-for="timeOption in expirationOptions"
+              :key="timeOption.asString"
+              :value="timeOption.asNumber"
+            >
+              {{ timeOption.asString }}
+            </option>
+          </select>
+        </div>
+
+        <div class="flex flex-col">
+          <label>Dodaj zdjęcia</label>
+          <input
+            type="file"
+            accept="image/png, image/jpeg"
+            required
+            multiple
+            @change="onFileChange($event)"
+            class="bg-gray-800 w-full sm:w-2/3 p-3 rounded-md shadow-md"
+          >
+        </div>
+        <div class="flex flex-row items-center justify-center sm:justify-start flex-wrap mt-2">
+          <div
+            v-for="(url, index) in urls"
+            :key="url"
+            class="bg-cover bg-no-repeat bg-center grid-cols-1 m-2 h-64 w-full sm:w-64 flex flex-col"
+            :style="{ backgroundImage: 'url(' + url + ')' }"
+          >
+            <div class="flex justify-end items-end h-full">
+              <svg xmlns="http://www.w3.org/2000/svg"
+                @click="removeImage(index)"
+                class="h-8 w-8 m-1 p-1 rounded bg-gray-800 text-white button-animation-hover cursor-pointer " fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            </div>
           </div>
         </div>
-      </div>
 
-      <button @click="addGallery">Dodaj kod</button>
+        <input
+          type="submit"
+          value="Dodaj kod"
+          class="bg-gray-800 text-lg px-3 py-2 mt-7 rounded shadow-md cursor-pointer hover:bg-gray-900"
+        >
+      </form>
     </div>
     <Footer />
   </div>
@@ -45,6 +96,7 @@
 
 <script>
 import Navbar from '../components/Navbar.vue'
+import Alert from '../components/Alert.vue'
 import Footer from '../components/Footer.vue'
 
 import axios from 'axios'
@@ -52,7 +104,11 @@ import API_URL from '../API_URL'
 import expirationOptions  from  '../json_files/expirationOptions .json'
 
 export default {
-  components: { Navbar, Footer },
+  components: { 
+    Navbar, 
+    Footer,
+    Alert
+  },
   data(){
     return{
       codeValue: '',
@@ -103,8 +159,7 @@ export default {
       .catch(err => console.log(err))
       // adding images to cloudinary and waiting for save, next step is sending request to backend(strapi) and save the gallery
       if(!this.codeError){
-        const timeToDelete = Number(new Date()) + this.expirationTime;
-
+        const timeToDelete = Number(new Date()) + Number(this.expirationTime);
         await this.images.forEach(async image =>{
           let isPostedImages = false;
 
@@ -125,6 +180,8 @@ export default {
             if(this.imagesUrl.length === this.images.length) isPostedImages = true;
           })
           .catch(err => console.log(err))
+
+          this.codeValue = this.codeValue.replace(/ /g,'')
 
           if(isPostedImages){
             await axios.post(`${API_URL}/galleries`,
