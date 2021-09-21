@@ -2,7 +2,7 @@
   <div class="h-screen w-screen flex flex-col justify-center items-center">
     <div class=" w-4/5 h-4/5 flex flex-col justify-center items-center" >
       <h1 class="text-4xl font-bold">
-        Czy na pewno chcesz usunąć kod <span class="font-bold text-blue-400">{{ this.codeId }}</span>?
+        Czy na pewno chcesz usunąć kod <span class="font-bold text-blue-400">{{ this.codeCode }}</span>?
       </h1>
       <div class="mt-10">
         <button
@@ -26,6 +26,7 @@
 export default {
   props: {
     codeId: String,
+    codeCode: String,
   },
   methods: {
     deleteGallery(){

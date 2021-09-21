@@ -30,7 +30,7 @@
               <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mx-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
               </svg>
-              <h4 class="mx-2 font-medium">Wyloguj</h4>
+              <h4 class="mx-2 font-medium" @click="logout">Wyloguj</h4>
             </button>
           </div>
         </div>
@@ -76,7 +76,7 @@
               v-for="code in codes"
               :key="code"
             >
-              <router-link 
+              <router-link
                 :to="{ name: 'Gallery', params: { code: code.code }}"
                 class="flex flex-col justify-center items-center "
               >
@@ -84,12 +84,12 @@
                 <span class="font-bold text-2xl text-blue-400">{{ code.code }}</span>
               </router-link>
               <div class="flex flex-row w-full justify-end items-center -mt-1">
-                <button @click="toggleExtensionGalleryLayer(code.code)" class="hover:text-gray-300">
+                <button @click="toggleExtensionGalleryLayer(code.id, code.code)" class="hover:text-gray-300">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                   </svg>
                 </button>
-                <button @click="toggleDeleteGalleryLayer(code.code)" class="hover:text-gray-300">
+                <button @click="toggleDeleteGalleryLayer(code.id, code.code)" class="hover:text-gray-300">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                   </svg>
@@ -103,6 +103,7 @@
     </div>
     <DeleteGalleryLayer
       :codeId="codeId"
+      :codeCode="codeCode"
       v-else-if="isDeleteGalleryLayer"
       @delete-gallery="deleteGallery"
       @toggle-delete-gallery-layer="toggleDeleteGalleryLayer"
@@ -110,6 +111,7 @@
     <ExtensionGalleryLayer
       :codeId="codeId"
       v-else-if="isExtensionGalleryLayer"
+      @set-time-to-delete="setTimeToDelete"
       @extension-gallery="extensionGallery"
       @toggle-extension-gallery-layer="toggleExtensionGalleryLayer"
     />
@@ -126,12 +128,14 @@ import axios from 'axios'
 
 export default {
   data() {
-    return { 
+    return {
       ISjwt: this.$cookies.isKey('jwt'),
       jwt: this.$cookies.get('jwt'),
-      
+
+      timeToDelete: 604800000,
       codes: [],
       codeId: '',
+      codeCode: '',
       isDeleteGalleryLayer: false,
       isExtensionGalleryLayer: false
     }
@@ -146,25 +150,54 @@ export default {
       this.$router.push('/login')
     }
 
-    await axios.get(`${API_URL}/galleries`, 
+    await axios.get(`${API_URL}/galleries`,
     { headers: { Authorization: `Bearer ${this.jwt}` } }
     ).then(response => {
       this.codes = response.data
     })
   },
   methods: {
-    deleteGallery() {
-      console.log('usuwanie');
+    setTimeToDelete(timeToDelete){
+      this.timeToDelete = timeToDelete;
     },
-    toggleDeleteGalleryLayer(id){
-      this.codeId = id
+    async deleteGallery() {
+      await axios.delete(`${API_URL}/galleries/${this.codeId}`,
+      { headers: { Authorization: `Bearer ${this.jwt}` } })
+      .then(res => console.log(res))
+      .catch(err => console.log(err));
+
+      window.location.reload()
+    },
+    async extensionGallery() {
+      let gallery = {}
+
+      await axios.get(`${API_URL}/galleries/${this.codeCode}`)
+      .then(res => gallery = res.data)
+      .catch(err => console.log(err))
+
+      const newTimeToDelete = Date.parse(gallery.timeToDelete) + Number(this.timeToDelete);
+
+      await axios.put(`${API_URL}/galleries/${this.codeId}`,
+      { timeToDelete: newTimeToDelete },
+      { headers: { Authorization: `Bearer ${this.jwt}` } })
+      .then(res => console.log(res))
+      .catch(err => console.log(err));
+
+      window.location.reload()
+    },
+    async logout(){
+      await this.$cookies.remove('jwt');
+      await this.$cookies.remove('user');
+      this.$router.push('/')
+    },
+    toggleDeleteGalleryLayer(id, code){
+      this.codeId = id;
+      this.codeCode = code;
       this.isDeleteGalleryLayer = !this.isDeleteGalleryLayer;
     },
-    extensionGallery() {
-      console.log('przedłużanie');
-    },
-    toggleExtensionGalleryLayer(id){
-      this.codeId = id
+    toggleExtensionGalleryLayer(id, code){
+      this.codeId = id;
+      this.codeCode = code;
       this.isExtensionGalleryLayer = !this.isExtensionGalleryLayer;
     },
   },

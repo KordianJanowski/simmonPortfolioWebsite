@@ -5,6 +5,7 @@
       <label for="">kod</label>
       <input type="" v-model="codeValue">
       <div v-show="codeError">wprowadzony kod juz istnieje</div>
+      <textarea name="" v-model="descriptionValue" maxlength="500" id="" cols="30" rows="10"></textarea>
 
       <div v-for="time in expirationOptions " :key="time" @click="setTimeValue(time.asNumber)">
         {{ time.asString }}
@@ -55,6 +56,7 @@ export default {
   data(){
     return{
       codeValue: '',
+      descriptionValue: '',
 
       urls: [],
       images: [],
@@ -126,7 +128,7 @@ export default {
 
           if(isPostedImages){
             await axios.post(`${API_URL}/galleries`,
-            { images: this.imagesUrl, code: this.codeValue, timeToDelete },
+            { images: this.imagesUrl, code: this.codeValue, description: this.descriptionValue ,timeToDelete },
             { headers: { Authorization: `Bearer ${this.jwt}` } }
             )
             .then(() => this.$router.push('/panel'))

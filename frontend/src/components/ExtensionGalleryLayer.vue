@@ -2,14 +2,15 @@
   <div class="h-screen w-screen flex flex-col justify-center items-center">
     <div class=" w-4/5 h-4/5 flex flex-col justify-center items-center" >
       <h1 class="text-4xl font-bold">
-        Wybierz, o ile chcesz przedłużyć kod <span class="font-bold text-blue-400">{{ this.codeId }}</span>
+        Wybierz, o ile chcesz przedłużyć kod <span class="font-bold text-blue-400">{{ this.codeCode }}</span>
       </h1>
-      <select ref="extensionSelect" class="text-gray-800 text-2xl p-2 w-52 h-16 my-10">
-        <option 
+      <select @change="setTimeToDelete($event.target.value)" ref="extensionSelect" class="text-gray-800 text-2xl p-2 w-52 h-16 my-10">
+        <option
           v-for="timeOption in expirationOptions"
           :key="timeOption.asString"
           :value="timeOption.asNumber"
         >
+
           {{ timeOption.asString }}
         </option>
       </select>
@@ -44,8 +45,12 @@ export default {
   },
   props: {
     codeId: String,
+    codeCode: String
   },
   methods: {
+    setTimeToDelete(timeToDelete){
+      this.$emit('set-time-to-delete', timeToDelete)
+    },
     extensionGallery(){
       this.extensionValue = this.$refs.extensionSelect.value
       this.$emit('extension-gallery')

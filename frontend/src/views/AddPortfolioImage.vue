@@ -8,6 +8,7 @@
       class=""
       @change="onFileChange($event)"
     >
+    <textarea name="" v-model="descriptionValue" id="" cols="30" rows="10"></textarea>
 
     <div
       class="bg-cover bg-no-repeat bg-center grid-cols-1 m-2 h-72 flex flex-col"
@@ -31,6 +32,7 @@ import API_URL from '../API_URL'
 export default {
   data(){
     return{
+      descriptionValue: '',
       image: '',
       url: '',
 
@@ -72,7 +74,7 @@ export default {
 
       if(isPostedImages){
         await axios.post(`${API_URL}/portfolio-images`,
-        { image: this.imageUrl },
+        { image: this.imageUrl, description: descriptionValue },
         { headers: { Authorization: `Bearer ${this.jwt}` } }
         )
         .then(() => this.$router.push('/panel'))
