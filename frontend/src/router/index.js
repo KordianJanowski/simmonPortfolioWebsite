@@ -3,8 +3,10 @@ import Home from '../views/Home.vue'
 import CheckCode from '../views/CheckCode.vue'
 import Gallery from '../views/Gallery.vue'
 import AddGallery from '../views/AddGallery.vue'
+import EditGallery from '../views/EditGallery.vue'
 import Portfolio from '../views/Portfolio.vue'
 import AddPortfolioImage from '../views/AddPortfolioImage.vue'
+import EditPortfolioImage from '../views/EditPortfolioImage.vue'
 import AddDriveImages from '../views/AddDriveImages.vue'
 import About from '../views/About.vue'
 import Contact from '../views/Contact.vue'
@@ -39,6 +41,12 @@ const routes = [
     component: AddGallery
   },
   {
+    path: '/edit-gallery',
+    name: 'EditGallery',
+    component: EditGallery,
+    props: true
+  },
+  {
     path: '/portfolio',
     name: 'Portfolio',
     component: Portfolio
@@ -46,7 +54,13 @@ const routes = [
   {
     path: '/add-portfolio-image',
     name: 'AddPortfolioImage',
-    component: AddPortfolioImage
+    component: AddPortfolioImage,
+  },
+  {
+    path: '/edit-portfolio-image',
+    name: 'EditPortfolioImage',
+    component: EditPortfolioImage,
+    props: true
   },
   {
     path: '/add-drive-images',

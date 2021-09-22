@@ -2,8 +2,8 @@
   <div>
     <Navbar />
     <div class="flex w-full justify-center mx-auto my-32">
-      <form @submit.prevent="addGallery" class="container w-11/12 sm:max-w-3xl bg-gray-700 rounded-md shadow-md p-5">
-        <h1 class="text-3xl font-semibold text-blue-400 mb-5">Dodaj kod</h1>
+      <form @submit.prevent="editGallery" class="container w-11/12 sm:max-w-3xl bg-gray-700 rounded-md shadow-md p-5">
+        <h1 class="text-white font-semibold text-3xl mb-5">Edytuj kod <span class="text-blue-400">{{ this.codeValue }}</span></h1>
 
         <div class="flex flex-col">
           <label>Kod</label>
@@ -22,7 +22,7 @@
           :alertText="'Wprowadzony kod już istnieje'"
         />
 
-        <div class="flex flex-col mt-6">
+        <div class="flex flex-col my-6">
           <label>Opis</label>
           <textarea
             class="py-2 px-3 text-xl w-full sm:w-3/4 rounded shadow-md bg-gray-800 focus:outline-none"
@@ -36,27 +36,8 @@
           ></textarea>
         </div>
 
-
-        <div class="flex flex-col my-6">
-          <label>Czas trwania</label>
-          <select
-            @change="setTimeValue($event.target.value)"
-            ref="extensionSelect"
-            required
-            class="py-2 px-3 text-xl w-full sm:w-2/3 rounded shadow-md bg-gray-800 focus:outline-none">
-            <option disabled selected hidden value="">Wybierz</option>
-            <option
-              v-for="timeOption in expirationOptions"
-              :key="timeOption.asString"
-              :value="timeOption.asNumber"
-            >
-              {{ timeOption.asString }}
-            </option>
-          </select>
-        </div>
-
         <div class="flex flex-col">
-          <label>Dodaj zdjęcia</label>
+          <label>Zdjęcia</label>
           <input
             type="file"
             accept="image/png, image/jpeg"
@@ -85,7 +66,7 @@
 
         <input
           type="submit"
-          value="Dodaj kod"
+          value="Zapisz zmiany"
           class="bg-gray-800 text-lg px-3 py-2 mt-7 rounded shadow-md cursor-pointer hover:bg-gray-900"
         >
       </form>
@@ -101,7 +82,6 @@ import Footer from '../components/Footer.vue'
 
 import axios from 'axios'
 import API_URL from '../API_URL'
-import expirationOptions  from  '../json_files/expirationOptions .json'
 
 export default {
   components: { 
@@ -116,39 +96,45 @@ export default {
 
       urls: [],
       images: [],
-      imagesUrl: [],
 
+      codeError: false,
       jwt: this.$cookies.get('jwt'),
       ISjwt: this.$cookies.isKey('jwt'),
-
-      expirationOptions : expirationOptions ,
-      expirationTime: 604800000,
 
       setTimeout: Function,
       setTimeoutTime: 4000,
       codeError: false
     }
   },
+  props: {
+    code: String,
+    description: String,
+    imagesProp: Array,
+  },
   created(){
     if(!this.ISjwt){
       this.$router.push('/login')
     }
+    if(!this.code || !this.description || !this.imagesProp) {
+      this.$router.push('/panel')
+    }
+
+    this.codeValue = this.code
+    this.descriptionValue = this.description
+    this.urls = this.imagesProp
   },
   methods: {
-    setTimeValue(value){
-      this.expirationTime = value;
-    },
     async onFileChange(e){
       e.target.files.forEach(image => {
-        this.images.push(image)
         this.urls.push(URL.createObjectURL(image))
+        this.images.push(image)
       })
     },
     removeImage(index){
-      this.images.splice(index,1)
       this.urls.splice(index,1)
+      this.images.splice(index,1)
     },
-    async addGallery(){
+    async editGallery(){
       this.codeValue = this.codeValue.replace(/ /g,'')
       
       await axios.get(`${API_URL}/galleries/${this.codeValue}`)
@@ -159,42 +145,7 @@ export default {
         return this.codeError = true
       })
       .catch(err => console.log(err))
-      // adding images to cloudinary and waiting for save, next step is sending request to backend(strapi) and save the gallery
-      if(!this.codeError){
-        const timeToDelete = Number(new Date()) + Number(this.expirationTime);
-        await this.images.forEach(async image =>{
-          let isPostedImages = false;
-
-          const data = new FormData()
-          data.append('file', image)
-          data.append("api_key", '416912495735314');
-          data.append("api_secret", 'YBiJZM4b-1K36oto3R9fPHygxr0');
-          data.append("cloud_name", 'dz5juxdmi');
-          data.append("upload_preset", "imti6imf");
-
-          await axios.post(
-            `https://api.cloudinary.com/v1_1/dz5juxdmi/image/upload`,
-            data
-          )
-          .then(async res => {
-            console.log(res.data);
-            await this.imagesUrl.push(res.data.url);
-            if(this.imagesUrl.length === this.images.length) isPostedImages = true;
-          })
-          .catch(err => console.log(err))
-
-
-          if(isPostedImages){
-            await axios.post(`${API_URL}/galleries`,
-            { images: this.imagesUrl, code: this.codeValue, description: this.descriptionValue ,timeToDelete },
-            { headers: { Authorization: `Bearer ${this.jwt}` } }
-            )
-            .then(() => this.$router.push('/panel'))
-            .catch(err => console.log(err))
-          }
-        })
-      }
-    }
+    } 
   }
 }
 </script>

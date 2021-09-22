@@ -39,32 +39,25 @@
         </div>
         <div class="flex justify-center lg:block">
           <div class="relative">
-            <select v-model="$i18n.locale" class="bg-transparent focus:outline-none" name="" id="">
-              <option
-                class="flex flex-row justify-between w-full items-center px-5 py-2 bg-gray-800 text-sm capitalize transition-colors duration-200 transform hover:text-gray-200 hover:bg-gray-800"
-                v-for="lang in languages"
-                :key="lang.name"
-              >
-                {{ lang.id }}
-                <img class="ml-2 h-3" :src="require(`../assets/svg/flags/${lang.id}.svg`)" alt="flag icon">
-              </option>
-            </select>
-            <!-- <button class="relative z-10 block px-2 rounded-md hover:text-gray-100 focus:outline-none focus:text-gray-300 group">
+            <button class="relative z-10 block px-2 rounded-md hover:text-gray-100 focus:outline-none focus:text-gray-300 group">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              <div class="hidden absolute right-0 z-20 w-48 py-2 mt-2 text-white bg-gray-700 rounded-md shadow-xl group-focus:block">
-                <button
-                  class="flex flex-row justify-between w-full items-center px-5 py-2 text-sm capitalize transition-colors duration-200 transform hover:text-gray-200 hover:bg-gray-800"
-                  v-for="lang in languages"
-                  :key="lang.name"
-                  @click="changeLanguage(lang.id)"
-                >
-                  {{ lang.name }}
-                  <img class="ml-2 h-3" :src="require(`../assets/svg/flags/${lang.id}.svg`)" alt="flag icon">
-                </button>
+              <div class="bg-transparent absolute z-20 right-0 bg-gray-800">
+                <div class="hidden w-48 mt-2 py-2 text-white bg-gray-700 rounded-md shadow-xl group-hover:block">
+                  <button
+                    class="flex flex-row justify-between w-full items-center px-5 py-2 text-sm capitalize transition-colors duration-100 transform hover:text-gray-200 hover:bg-blue-500"
+                    v-for="lang in languages"
+                    :key="lang.name"
+                    @click="handleChange(lang.id)"
+                    :class="[lang.id === this.lang ? 'bg-blue-600' : '', ]" 
+                  >
+                    {{ lang.name }}
+                    <img class="ml-2 h-3" :src="require(`../assets/svg/flags/${lang.id}.svg`)" alt="flag icon">
+                  </button>
+                </div>
               </div>
-            </button> -->
+            </button>
           </div>
         </div>
       </div>
@@ -78,20 +71,21 @@ export default {
   data() {
     return {
       navbarExpanded: false,
+      lang: localStorage.getItem('lang') || 'en',
       languages: [
         { 'name': "Polski", 'id': 'pl' },
         { 'name': "English", 'id': 'en' },
         { 'name': "Deutsch", 'id': 'de' }
       ],
-      lang: 'en'
     }
   },
   components: {
     RouterLinks,
   },
   methods: {
-    changeLanguage(lang) {
-      console.log(lang);
+    handleChange(lang) {
+      localStorage.setItem('lang', lang)
+      window.location.reload()
     }
   },
 }

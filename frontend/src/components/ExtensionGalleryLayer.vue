@@ -1,5 +1,5 @@
 <template>
-  <div class="h-screen w-screen flex flex-col justify-center items-center">
+  <div class="deleteOrEditLayer">
     <div class=" w-4/5 h-4/5 flex flex-col justify-center items-center" >
       <h1 class="text-4xl font-bold">
         Wybierz, o ile chcesz przedłużyć kod <span class="font-bold text-blue-400">{{ this.codeCode }}</span>

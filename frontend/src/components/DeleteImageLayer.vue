@@ -1,5 +1,5 @@
 <template>
-  <div class="h-screen w-screen flex flex-col justify-center items-center">
+  <div class="deleteOrEditLayer">
     <div class=" w-4/5 h-4/5 flex flex-col justify-center items-center" >
       <h1 class="text-4xl font-bold">
         Czy na pewno chcesz usunąć zdjęcie ?
@@ -26,10 +26,10 @@
 export default {
   methods: {
     deleteImage(){
-      this.$emit('delete-portfolio-image')
+      this.$emit('delete-image')
     },
     toggleDeleteImageLayer(){
-      this.$emit('toggle-delete-portfolio-image-layer')
+      this.$emit('toggle-delete-image-layer')
     }
   }
 }

@@ -3,7 +3,7 @@
     <Navbar />
     <div class="flex w-full justify-center mx-auto my-32">
       <form @submit.prevent="addImage" class="container w-11/12 sm:max-w-3xl bg-gray-700 rounded-md shadow-md p-5">
-        <h1 class="text-3xl font-semibold text-blue-400 mb-5">Dodaj zdjęcie do portfolio</h1>
+        <h1 class="text-3xl font-semibold text-blue-400 mb-5">Edytuj zdjęcie z portfolio</h1>
         
         <div class="flex flex-col">
           <label>Dodaj zdjęcie</label>
@@ -49,7 +49,7 @@
 
         <input 
           type="submit" 
-          value="Dodaj zdjęcie"
+          value="Zapisz zmiany"
           class="bg-gray-800 p-2 rounded shadow-md hover:bg-gray-900 cursor-pointer"
         >
       </form>
@@ -57,44 +57,59 @@
     <Footer />
   </div>
 </template>
-<script>
-import Navbar from '../components/Navbar.vue';
-import Footer from '../components/Footer.vue';
 
-import axios from 'axios';
+<script>
+import Navbar from '../components/Navbar.vue'
+import Footer from '../components/Footer.vue'
+
+import axios from 'axios'
 import API_URL from '../API_URL'
 
 export default {
   components: { 
     Navbar, 
-    Footer 
+    Footer,
   },
   data(){
     return{
+      codeValue: '',
       descriptionValue: '',
-      image: '',
+
       url: '',
+      image: {},
 
       jwt: this.$cookies.get('jwt'),
       ISjwt: this.$cookies.isKey('jwt'),
     }
   },
-  created() {
+  props: {
+    imageProp: String,
+    description: String,
+  },
+  created(){
     if(!this.ISjwt){
       this.$router.push('/login')
     }
+
+    if(!this.imageProp || !this.description) {
+      this.$router.push('/panel')
+    }
+
+
+
+    this.url = this.imageProp
+    this.descriptionValue = this.description
   },
   methods: {
     async onFileChange(e){
       e.target.files.forEach(image => {
-        this.image = image;
+        this.image = image
         this.url = URL.createObjectURL(image);
       })
     },
     removeImage(){
-      this.image = '';
-      this.url = '';
-      this.imageUrl = '';
+      this.url = ''
+      this.image = ''
     },
     async addImage(){
       let isPostedImages = false;
@@ -106,30 +121,12 @@ export default {
       data.append("cloud_name", 'dz5juxdmi');
       data.append("upload_preset", "imti6imf");
 
-      await axios.post(
-        `https://api.cloudinary.com/v1_1/dz5juxdmi/image/upload`,
-        data
-      )
-      .then(async res => {
-        console.log(res)
-        this.imageUrl = res.data.url;
-        isPostedImages = true;
-      })
-      .catch(err => console.log(err))
-
-      if(isPostedImages){
-        await axios.post(`${API_URL}/portfolio-images`,
-        { image: this.imageUrl, description: this.descriptionValue },
-        { headers: { Authorization: `Bearer ${this.jwt}` } }
-        )
-        .then(() => this.$router.push('/panel'))
-        .catch(err => console.log(err))
-      }
+      
     }
   }
 }
 </script>
 
 <style>
-
+/* created by : KordianJanowski & StanisławSztrajt © */
 </style>

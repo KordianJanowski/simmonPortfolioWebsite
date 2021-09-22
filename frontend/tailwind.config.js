@@ -24,7 +24,7 @@ module.exports = {
   },
   variants: {
     extend: {
-      display: ['group-focus'],
+      display: ['group-hover'],
     },
   },
   plugins: [],

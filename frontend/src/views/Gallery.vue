@@ -6,8 +6,8 @@
         <h2 class="text-4xl">Kod: <span class="font-bold text-blue-400">{{ gallery.code }}</span></h2>
         <hr class="my-4 border-gray-600">
         <div class="text-xl md:text-2xl">
-          <h3>Dla: <span class="font-bold text-blue-400">użytkownik</span></h3>
           <h3>Liczba zdjęć: <span class="font-bold text-blue-400"> {{ numberOfImages }} </span></h3>
+          <h3>Opis: <span class="font-bold text-blue-400"> {{ gallery.description }} </span></h3>
           <h3>Data wygaśnięcia: <span class="font-bold text-blue-400"> {{ expirationDate }} </span></h3>
           <div class="flex justify-center md:justify-end mt-4">
             <button class="flex flex-row items-center bg-gray-600 p-3 rounded shadow-md hover:bg-gray-500" @click="downloadAllImages">

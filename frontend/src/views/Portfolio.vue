@@ -1,14 +1,16 @@
 <template>
   <div>
     <Navbar />
-    <div class="container flex flex-col items-center mx-auto my-32">
+    <div class="container flex flex-col items-center mx-auto mt-32 mb-48">
       <div class="flex flex-row w-84 justify-between items-center border-b border-gray-600 shadow-md mb-5">
         <input 
           type="text"
+          v-model="searchingQuery"
           class="text-2xl w-11/12 bg-transparent focus:outline-none p-1"
           placeholder="Wyszukaj"
+          @keydown="checkKey($event)"
         >
-        <button class="hover:bg-gray-700 p-2">
+        <button @click="searchPhotos" class="hover:bg-gray-700 p-2">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" viewBox="0 0 20 20" fill="currentColor">
             <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
           </svg>
@@ -50,15 +52,33 @@ export default {
   },
   data(){
     return{
+      searchingQuery: '',
       imagesUrl: [],
+      imagesUrlCopy: [],
     }
   },
   async created(){
     await axios.get(`${API_URL}/portfolio-images`)
     .then(res => {
       this.imagesUrl = res.data
+      this.imagesUrlCopy = res.data
     })
     .catch(err => console.log(err))
+  },
+  methods: {
+    searchPhotos() {
+      this.imagesUrl = this.imagesUrlCopy
+      this.imagesUrl = this.imagesUrl.filter((image) => {
+        let imageDescription = image.description.toLowerCase()
+        let searchingQuery = this.searchingQuery.toLowerCase().split(' ')
+        return searchingQuery.every(searchingWord => imageDescription.includes(searchingWord));
+      })
+    },
+    checkKey(event) {
+      if(event.key === "Enter") {
+        this.searchPhotos()
+      }
+    }
   },
 }
 </script>

@@ -3,7 +3,6 @@ import App from './App.vue'
 import router from './router'
 import './index.css'
 import VueCookies from 'vue3-cookies'
-//created by : KordianJanowski & StanisławSztrajt ©
 
 import en from './assets/i18n/en.json'
 import pl from './assets/i18n/pl.json'
@@ -12,7 +11,7 @@ import de from './assets/i18n/de.json'
 import { createI18n } from 'vue-i18n';
 
 const i18n = createI18n({
-  locale: "en",
+  locale: localStorage.getItem('lang'),
   messages: {
     en: en,
     pl: pl,
@@ -23,5 +22,6 @@ const i18n = createI18n({
 const app = createApp(App);
 app.use(VueCookies)
 app.use(router)
-app.use(i18n);
+app.use(i18n)
 app.mount("#app");
+//created by : KordianJanowski & StanisławSztrajt ©
