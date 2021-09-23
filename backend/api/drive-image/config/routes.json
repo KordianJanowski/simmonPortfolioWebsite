@@ -1,0 +1,52 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/drive-images",
+      "handler": "drive-image.find",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/drive-images/count",
+      "handler": "drive-image.count",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/drive-images/:id",
+      "handler": "drive-image.findOne",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/drive-images",
+      "handler": "drive-image.create",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/drive-images/:id",
+      "handler": "drive-image.update",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/drive-images/:id",
+      "handler": "drive-image.delete",
+      "config": {
+        "policies": []
+      }
+    }
+  ]
+}

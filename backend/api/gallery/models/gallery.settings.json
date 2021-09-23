@@ -20,6 +20,9 @@
     },
     "code": {
       "type": "uid"
+    },
+    "description": {
+      "type": "text"
     }
   }
 }

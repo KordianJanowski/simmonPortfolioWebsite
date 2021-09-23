@@ -33,22 +33,22 @@
           <div
             class="bg-gray-700 rounded shadow-md mr-7 mb-10"
             v-show="portfolioImages.length !== 0"
-            v-for="(imageUrl, index) in portfolioImages"
+            v-for="(image, index) in portfolioImages"
             :key="index"
           >
             <div class="flex flex-col w-full justify-end items-center">
               <div
                 class="w-72 h-72 bg-center bg-cover bg-no-repeat m-2 rounded shadow-md"
-                :style="{ backgroundImage: 'url(' + imageUrl.image + ')' }"
+                :style="{ backgroundImage: 'url(' + image.image + ')' }"
               >
               </div>
               <div class="flex w-full justify-end">
-                <router-link :to="{ name: 'EditPortfolioImage', params: { imageProp: imageUrl.image, description: imageUrl.description }}" class="hover:text-gray-300">
+                <router-link :to="{ name: 'EditPortfolioImage', params: { imageProp: image.image, description: image.description, portfolioId: image.id }}" class="hover:text-gray-300">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                   </svg>
                 </router-link>
-                <button @click="toggleDeletePortfolioImageLayer(imageUrl.id)" class="hover:text-gray-300 mb-2 mr-3">
+                <button @click="toggleDeletePortfolioImageLayer(image.id)" class="hover:text-gray-300 mb-2 mr-3">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                   </svg>
@@ -98,12 +98,12 @@ export default {
       { headers: { Authorization: `Bearer ${this.jwt}` } })
       .then(res => console.log(res))
       .catch(err => console.log(err));
-      
+
       const index = this.portfolioImages.findIndex(el => el.id === this.portfolioImageId)
       this.portfolioImages.splice(index, 1)
 
       this.toggleDeletePortfolioImageLayer('')
-      
+
     },
     toggleDeletePortfolioImageLayer(id){
       this.portfolioImageId = id

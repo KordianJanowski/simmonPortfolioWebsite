@@ -4,7 +4,7 @@
     <div class="flex w-full justify-center mx-auto my-32">
       <form @submit.prevent="addDriveImages" class="container w-11/12 sm:max-w-3xl bg-gray-700 rounded-md shadow-md p-5">
         <h1 class="text-3xl font-semibold text-blue-400 mb-5">Dodaj zdjęcia do dysku</h1>
-        
+
         <div class="flex flex-col">
           <label>Dodaj zdjęcia</label>
           <input
@@ -32,9 +32,9 @@
             </div>
           </div>
         </div>
-        
-        <input 
-          type="submit" 
+
+        <input
+          type="submit"
           value="Dodaj zdjęcia"
           class="bg-gray-800 mt-5 p-2 rounded shadow-md hover:bg-gray-900 cursor-pointer"
         >
@@ -52,9 +52,9 @@ import axios from 'axios';
 import API_URL from '../API_URL'
 
 export default {
-  components: { 
-    Navbar, 
-    Footer 
+  components: {
+    Navbar,
+    Footer
   },
   data(){
     return{
@@ -84,8 +84,6 @@ export default {
     },
     async addDriveImages(){
       await this.images.forEach(async image =>{
-        let isPostedImages = false;
-
         const data = new FormData()
         data.append('file', image)
         data.append("api_key", '416912495735314');
@@ -98,20 +96,18 @@ export default {
           data
         )
         .then(async res => {
-          console.log(res.data);
-          await this.imagesUrl.push(res.data.url);
-          if(this.imagesUrl.length === this.images.length) isPostedImages = true;
+            console.log(res)
+            await this.imagesUrl.push(res.data.url)
+            await axios.post(`${API_URL}/drive-images`,
+            { url: res.data.url },
+            { headers: { Authorization: `Bearer ${this.jwt}` } }
+            )
+            .then(() => {
+              if(this.images.length === this.imagesUrl.length) this.$router.push('/panel')
+            })
+            .catch(err => console.log(err))
         })
         .catch(err => console.log(err))
-
-        if(isPostedImages){
-          await axios.post(`${API_URL}/drive-images`,
-          { images: this.imagesUrl },
-          { headers: { Authorization: `Bearer ${this.jwt}` } }
-          )
-          .then(() => this.$router.push('/panel'))
-          .catch(err => console.log(err))
-        }
       })
     }
   }

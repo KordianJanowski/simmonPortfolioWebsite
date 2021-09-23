@@ -84,8 +84,8 @@ import axios from 'axios'
 import API_URL from '../API_URL'
 
 export default {
-  components: { 
-    Navbar, 
+  components: {
+    Navbar,
     Footer,
     Alert
   },
@@ -96,6 +96,7 @@ export default {
 
       urls: [],
       images: [],
+      imagesUrl: [],
 
       codeError: false,
       jwt: this.$cookies.get('jwt'),
@@ -110,6 +111,7 @@ export default {
     code: String,
     description: String,
     imagesProp: Array,
+    codeId: String
   },
   created(){
     if(!this.ISjwt){
@@ -136,7 +138,7 @@ export default {
     },
     async editGallery(){
       this.codeValue = this.codeValue.replace(/ /g,'')
-      
+
       await axios.get(`${API_URL}/galleries/${this.codeValue}`)
       .then(() => {
         this.setTimeout = setTimeout(() =>{
@@ -145,7 +147,41 @@ export default {
         return this.codeError = true
       })
       .catch(err => console.log(err))
-    } 
+
+      if(!this.codeError){
+        await this.images.forEach(async image =>{
+          let isPostedImages = false;
+
+          const data = new FormData()
+          data.append('file', image)
+          data.append("api_key", '416912495735314');
+          data.append("api_secret", 'YBiJZM4b-1K36oto3R9fPHygxr0');
+          data.append("cloud_name", 'dz5juxdmi');
+          data.append("upload_preset", "imti6imf");
+
+          await axios.post(
+            `https://api.cloudinary.com/v1_1/dz5juxdmi/image/upload`,
+            data
+          )
+          .then(async res => {
+            console.log(res.data);
+            await this.imagesUrl.push(res.data.url);
+            if(this.imagesUrl.length === this.images.length) isPostedImages = true;
+          })
+          .catch(err => console.log(err))
+
+
+          if(isPostedImages){
+            await axios.put(`${API_URL}/galleries/${this.codeId}`,
+            { images: this.imagesUrl, code: this.codeValue, description: this.descriptionValue },
+            { headers: { Authorization: `Bearer ${this.jwt}` } }
+            )
+            .then(() => this.$router.push('/panel'))
+            .catch(err => console.log(err))
+          }
+        })
+      }
+    }
   }
 }
 </script>
