@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="!isDeleteDriveImageLayer" class="p-20 flex flex-col w-full">
+    <div v-if="!isDeleteDriveImageLayer && !isPhotoLayerVisible" class="p-20 flex flex-col w-full">
       <h1 class="text-5xl font-bold">Dysk</h1>
       <hr class="my-10 border-gray-700">
       <div class="flex flex-row flex-wrap">
@@ -30,9 +30,10 @@
           </div>
         </div>
         <div class="flex flex-row flex-wrap">
-          <div
+          <button
             class="bg-gray-700 rounded shadow-md mr-7 mb-10"
             v-show="driveImages.length !== 0"
+            @click="toggleShowPhotoLayer(image)"
             v-for="(image, index) in driveImages"
             :key="index"
           >
@@ -50,14 +51,20 @@
                 </button>
               </div>
             </div>
-          </div>
+          </button>
         </div>
       </div>
     </div>
     <DeleteImageLayer
-      v-else
+      v-else-if="isDeleteDriveImageLayer && !isPhotoLayerVisible"
       @toggle-delete-image-layer="toggleDeleteDriveImageLayer"
       @delete-image="deleteDriveImage"
+    />
+    <PhotoLayer
+      v-else-if="isPhotoLayerVisible && !isDeleteDriveImageLayer"
+      :imageProp="this.imageToLayer"
+      class="ml-64"
+      @toggle-show-photo-layer="toggleShowPhotoLayer"
     />
   </div>
 </template>
@@ -66,6 +73,7 @@ import axios from 'axios'
 import API_URL from '../API_URL'
 
 import DeleteImageLayer from '../components/DeleteImageLayer.vue'
+import PhotoLayer from '../components/PhotoLayer.vue'
 
 export default {
   data() {
@@ -73,6 +81,9 @@ export default {
       driveImages: [],
       driveImageId: '',
       isDeleteDriveImageLayer: false,
+
+      imageToLayer: {},
+      isPhotoLayerVisible: false,
     }
   },
   props: {
@@ -80,6 +91,7 @@ export default {
   },
   components: {
     DeleteImageLayer,
+    PhotoLayer
   },
   async created() {
     await axios.get(`${API_URL}/drive-images`,
@@ -92,7 +104,6 @@ export default {
     async deleteDriveImage() {
       await axios.delete(`${API_URL}/drive-images/${this.driveImageId}`,
       { headers: { Authorization: `Bearer ${this.jwt}` } })
-      .then(res => console.log(res))
       .catch(err => console.log(err));
 
       const index = this.driveImages.findIndex(el => el.id === this.driveImageId)
@@ -104,6 +115,10 @@ export default {
     toggleDeleteDriveImageLayer(id){
       this.driveImageId = id
       this.isDeleteDriveImageLayer = !this.isDeleteDriveImageLayer;
+    },
+    toggleShowPhotoLayer(image) {
+      this.isPhotoLayerVisible = !this.isPhotoLayerVisible
+      this.imageToLayer = image
     }
   },
 }

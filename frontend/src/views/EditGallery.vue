@@ -41,7 +41,6 @@
           <input
             type="file"
             accept="image/png, image/jpeg"
-            required
             multiple
             @change="onFileChange($event)"
             class="bg-gray-800 w-full sm:w-2/3 p-3 rounded-md shadow-md"
@@ -99,8 +98,8 @@ export default {
       imagesUrl: [],
 
       codeError: false,
-      jwt: this.$cookies.get('jwt'),
-      ISjwt: this.$cookies.isKey('jwt'),
+      ISjwt: this.$cookies.isKey('jwt') ? this.$cookies.isKey('jwt') : false,
+      jwt: this.$cookies.get('jwt') ? this.$cookies.get('jwt') : false,
 
       setTimeout: Function,
       setTimeoutTime: 4000,

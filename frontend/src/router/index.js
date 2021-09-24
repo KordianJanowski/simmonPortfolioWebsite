@@ -11,7 +11,10 @@ import AddDriveImages from '../views/AddDriveImages.vue'
 import About from '../views/About.vue'
 import Contact from '../views/Contact.vue'
 import Login from '../views/Login.vue'
+import ChangeLoginDetails from '../views/ChangeLoginDetails.vue'
 import Panel from '../views/Panel.vue'
+import Impressum from '../views/Impressum.vue'
+import NotFound from '../views/NotFound.vue'
 
 const routes = [
   {
@@ -83,14 +86,24 @@ const routes = [
     component: Login
   },
   {
+    path: '/change-login-details',
+    name: 'ChangeLoginDetails',
+    component: ChangeLoginDetails
+  },
+  {
     path: '/panel',
     name: 'Panel',
     component: Panel
   },
   {
+    path: '/impressum',
+    name: 'Impressum',
+    component: Impressum
+  },
+  {
     path: "/:pathMatch(.*)*",
     name: "NotFound",
-    component: {}
+    component: NotFound,
   }
 ]
 

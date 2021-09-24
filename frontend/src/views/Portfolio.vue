@@ -1,13 +1,13 @@
 <template>
   <div>
     <Navbar />
-    <div class="container flex flex-col items-center mx-auto mt-32 mb-48">
+    <div v-if="!isPhotoLayerVisible" class="container flex flex-col items-center mx-auto mt-32 mb-48">
       <div class="flex flex-row w-84 justify-between items-center border-b border-gray-600 shadow-md mb-5">
         <input 
           type="text"
           v-model="searchingQuery"
           class="text-2xl w-11/12 bg-transparent focus:outline-none p-1"
-          placeholder="Wyszukaj"
+          :placeholder="$t('portfolio.search')"
           @keydown="checkKey($event)"
         >
         <button @click="searchPhotos" class="hover:bg-gray-700 p-2">
@@ -21,6 +21,7 @@
           v-show="imagesUrl.length !== 0"
           v-for="(imageUrl, index) in imagesUrl"
           :key="index"
+          @click="toggleShowPhotoLayer(imageUrl)"
           class="w-72 h-72 bg-center bg-cover bg-no-repeat m-7 rounded shadow-md"
           :style="{ backgroundImage: 'url(' + imageUrl.image + ')' }"
         >
@@ -31,16 +32,22 @@
             src="../assets/svg/noImagesFound.svg" 
             alt="No images found"
           >
-          <span class="text-2xl md:text-3xl mt-10 text-gray-300">Nie znaleziono żadnych zdjęć</span>
+          <span class="text-2xl md:text-3xl mt-10 text-gray-300">{{ $t("portfolio.no-photos-found") }}</span>
         </div>
       </div>
     </div>
+    <PhotoLayer
+      v-else
+      :imageProp="this.imageToLayer"
+      @toggle-show-photo-layer="toggleShowPhotoLayer"
+    />
     <Footer />
   </div>
 </template>
 <script>
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer.vue';
+import PhotoLayer from '../components/PhotoLayer.vue';
 
 import axios from 'axios';
 import API_URL from '../API_URL'
@@ -48,13 +55,17 @@ import API_URL from '../API_URL'
 export default {
   components: {
     Navbar,
-    Footer
+    Footer,
+    PhotoLayer
   },
   data(){
     return{
       searchingQuery: '',
       imagesUrl: [],
       imagesUrlCopy: [],
+
+      imageToLayer: {},
+      isPhotoLayerVisible: false
     }
   },
   async created(){
@@ -78,6 +89,10 @@ export default {
       if(event.key === "Enter") {
         this.searchPhotos()
       }
+    },
+    toggleShowPhotoLayer(image) {
+      this.isPhotoLayerVisible = !this.isPhotoLayerVisible
+      this.imageToLayer = image
     }
   },
 }

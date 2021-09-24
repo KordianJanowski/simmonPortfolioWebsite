@@ -9,7 +9,7 @@
       <RouterLinks :className="'footer'" />
       <hr class="my-8 border-gray-600">
       <div class="sm:flex sm:items-center sm:justify-between">
-        <p class="text-sm text-gray-300 mb-2 sm:mb-0">© Copyright 2021. All Rights Reserved.</p>
+        <router-link to="/impressum" class="text-sm text-gray-300 mb-2 sm:mb-0">© Copyright 2021. All Rights Reserved.</router-link>
         <SocialMediaIcons />
       </div>
     </div>

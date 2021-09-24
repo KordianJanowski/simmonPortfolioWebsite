@@ -75,8 +75,8 @@ export default {
       image: '',
       url: '',
 
-      jwt: this.$cookies.get('jwt'),
-      ISjwt: this.$cookies.isKey('jwt'),
+      ISjwt: this.$cookies.isKey('jwt') ? this.$cookies.isKey('jwt') : false,
+      jwt: this.$cookies.get('jwt') ? this.$cookies.get('jwt') : false,
     }
   },
   created() {

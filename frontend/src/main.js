@@ -8,7 +8,7 @@ import en from './assets/i18n/en.json'
 import pl from './assets/i18n/pl.json'
 import de from './assets/i18n/de.json'
 
-import { createI18n } from 'vue-i18n';
+import { createI18n } from 'vue-i18n/index';
 
 const i18n = createI18n({
   locale: localStorage.getItem('lang'),

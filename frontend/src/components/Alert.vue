@@ -7,7 +7,7 @@
     </div>
     <div class="px-4 py-2 -mx-3">
       <div class="mx-3">
-        <span class="font-semibold text-blue-400">Uwaga!</span>
+        <span class="font-semibold text-blue-400">{{ $t("alert.attention") }}</span>
         <p class="text-sm text-gray-200">{{ this.alertText }}</p>
       </div>
     </div>

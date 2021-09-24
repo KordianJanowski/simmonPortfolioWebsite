@@ -10,7 +10,6 @@
           <input
             type="file"
             accept="image/png, image/jpeg"
-            required
             class="bg-gray-800 w-full sm:w-2/3 p-3 rounded-md shadow-md"
             @change="onFileChange($event)"
           >
@@ -78,26 +77,33 @@ export default {
       url: '',
       image: {},
 
-      jwt: this.$cookies.get('jwt') ? this.$cookies.get('jwt') : false,
       ISjwt: this.$cookies.isKey('jwt') ? this.$cookies.isKey('jwt') : false,
+      jwt: this.$cookies.get('jwt') ? this.$cookies.get('jwt') : false,
     }
   },
   props: {
-    imageProp: String,
+    imageId: String,
     description: String,
     portfolioId: String,
   },
-  created(){
+  async created(){
     if(!this.ISjwt){
       this.$router.push('/login')
     }
 
-    if(!this.imageProp || !this.description) {
+    if(!this.imageId || !this.description) {
       this.$router.push('/panel')
     }
 
-    this.url = this.imageProp
     this.descriptionValue = this.description
+
+    await axios.get(`${API_URL}/portfolio-images/${this.imageId}`)
+    .then((res) => {
+      this.image = res.data
+      this.url = res.data.image
+    })
+    .catch(err => console.log(err))
+
   },
   methods: {
     async onFileChange(e){
@@ -128,9 +134,16 @@ export default {
         this.imageUrl = res.data.url;
         isPostedImages = true;
       })
-      .catch(err => console.log(err))
+      .catch(async err => {
+        return await axios.put(`${API_URL}/portfolio-images/${this.portfolioId}`,
+        { description: this.descriptionValue },
+        { headers: { Authorization: `Bearer ${this.jwt}` } }
+        )
+        .then(() => this.$router.push('/panel'))
+        .catch(err => console.log(err))
+      })
 
-      if(isPostedImages){
+      if (isPostedImages){
         await axios.put(`${API_URL}/portfolio-images/${this.portfolioId}`,
         { image: this.imageUrl, description: this.descriptionValue },
         { headers: { Authorization: `Bearer ${this.jwt}` } }

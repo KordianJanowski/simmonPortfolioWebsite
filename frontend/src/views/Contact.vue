@@ -2,7 +2,7 @@
   <div>
     <Navbar />
 
-    <ContactComponent />
+    <ContactComponent class="mt-20 2xl:mt-0" />
 
     <Footer />
   </div>

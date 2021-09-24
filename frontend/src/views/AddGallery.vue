@@ -118,8 +118,8 @@ export default {
       images: [],
       imagesUrl: [],
 
-      jwt: this.$cookies.get('jwt'),
-      ISjwt: this.$cookies.isKey('jwt'),
+      ISjwt: this.$cookies.isKey('jwt') ? this.$cookies.isKey('jwt') : false,
+      jwt: this.$cookies.get('jwt') ? this.$cookies.get('jwt') : false,
 
       expirationOptions : expirationOptions ,
       expirationTime: 604800000,

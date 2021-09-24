@@ -6,11 +6,13 @@
         <div class="container px-6 py-16 mx-auto items-center lg:flex">
           <div class="w-full lg:w-1/2">
             <div class="lg:max-w-lg">
-              <h1 class="text-2xl text-white font-bold lg:text-4xl">Profesjonalne usługi fotograficzne</h1>
-              <p class="mt-2 text-gray-300 text-lg">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Porro beatae error laborum ab amet sunt recusandae? Reiciendis natus perspiciatis optio.</p>
-              <button class="w-full px-3 py-2 mt-6 text-sm font-bold text-gray-800 transition-colors duration-200 transform bg-white rounded-md lg:w-auto hover:bg-gray-300 focus:outline-none focus:bg-gray-300">
-                <router-link to="/about">O mnie</router-link>
-              </button>
+              <h1 class="text-2xl text-white font-bold lg:text-4xl">{{ $t("home.main-text") }}</h1>
+              <p class="mt-2 text-gray-300 text-lg mb-4">{{ $t("home.sub-text") }}</p>
+              <router-link 
+                to="/contact"
+                class="w-full px-3 py-2 text-sm font-bold text-gray-800 transition-colors duration-200 transform bg-white rounded-md lg:w-auto hover:bg-gray-300 focus:outline-none focus:bg-gray-300">
+                {{ $t("navbar.contact") }}
+              </router-link>
             </div>
           </div>
           <div class="flex items-center justify-center w-full mt-6 lg:mt-0 lg:w-1/2">
@@ -22,6 +24,8 @@
 
     <AboutComponent :aditionalClass="'lg:-mt-20'" />
 
+    <Carousel />
+
     <ContactComponent :aditionalClass="'-mt-6'" />
 
     <Footer />
@@ -32,6 +36,7 @@ import Navbar from '../components/Navbar'
 import AboutComponent from '../components/AboutComponent.vue'
 import ContactComponent from '../components/ContactComponent.vue'
 import Footer from '../components/Footer.vue'
+import Carousel from '../components/Carousel.vue'
 
 export default {
   data() {
@@ -42,6 +47,7 @@ export default {
   components: {
     Navbar,
     AboutComponent,
+    Carousel,
     ContactComponent,
     Footer,
   },

@@ -1,7 +1,7 @@
 <template>
   <div>
     <Navbar />
-    <div class="flex w-full justify-center mx-auto my-32">
+    <div class="flex w-full justify-center mx-auto my-32" :class="[urls.length === 0 ? 'sm:mb-56 2xl:mb-80' : '']">
       <form @submit.prevent="addDriveImages" class="container w-11/12 sm:max-w-3xl bg-gray-700 rounded-md shadow-md p-5">
         <h1 class="text-3xl font-semibold text-blue-400 mb-5">Dodaj zdjęcia do dysku</h1>
 
@@ -62,8 +62,8 @@ export default {
       images: [],
       imagesUrl: [],
 
-      jwt: this.$cookies.get('jwt'),
-      ISjwt: this.$cookies.isKey('jwt'),
+      ISjwt: this.$cookies.isKey('jwt') ? this.$cookies.isKey('jwt') : false,
+      jwt: this.$cookies.get('jwt') ? this.$cookies.get('jwt') : false,
     }
   },
   created() {
