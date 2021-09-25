@@ -87,6 +87,7 @@ export default {
         }).catch(console.error)
     },
     async downloadAllImages(){
+      let numberOfDownloadedImages = 0;
       var zip = new JSZip()
 
       this.gallery.images.forEach(async (image, index) => {
@@ -97,9 +98,10 @@ export default {
 
           const blob = new Blob([response.data], { type: 'image/png, image/jpeg' })
 
-          zip.file(`image${index+1}.${typeOfImage}`, blob)
+          zip.file(`image${index+1}${typeOfImage}`, blob)
+          numberOfDownloadedImages++;
 
-          if(this.gallery.images.length === index + 1) {
+          if(this.gallery.images.length === numberOfDownloadedImages) {
             zip.generateAsync({
               type: "blob"
             }).then(function(content) {

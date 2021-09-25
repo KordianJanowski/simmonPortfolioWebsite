@@ -118,8 +118,8 @@ export default {
       images: [],
       imagesUrl: [],
 
-      ISjwt: this.$cookies.isKey('jwt') ? this.$cookies.isKey('jwt') : false,
-      jwt: this.$cookies.get('jwt') ? this.$cookies.get('jwt') : false,
+      jwt: this.$cookies.get('jwt'),
+      ISjwt: this.$cookies.isKey('jwt'),
 
       expirationOptions : expirationOptions ,
       expirationTime: 604800000,
@@ -177,6 +177,7 @@ export default {
             data
           )
           .then(async res => {
+            console.log(res.data);
             await this.imagesUrl.push(res.data.secure_url);
             if(this.imagesUrl.length === this.images.length) isPostedImages = true;
           })
