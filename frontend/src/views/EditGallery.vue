@@ -16,7 +16,7 @@
             v-model="codeValue"
             placeholder="Np. K5F4j2H3fj (bez spacji)"
           >
-          <button @click="editCode" class="main-data-button mt-4">Edytuj kod</button>
+          <button @click="editCode" class="main-data-button w-32 mt-4">Edytuj kod</button>
         </div>
         <Alert
           v-show="codeError"
@@ -35,7 +35,7 @@
             cols="20"
             rows="10"
           ></textarea>
-          <button @click="editDescription" class="main-data-button mt-4">Edytuj opis</button>
+          <button @click="editDescription" class="main-data-button w-32 mt-4">Edytuj opis</button>
         </div>
 
         <div class="flex flex-col">
@@ -47,7 +47,7 @@
             @change="onFileChange($event)"
             class="bg-gray-800 w-full sm:w-2/3 p-3 rounded-md shadow-md"
           >
-          <button @click="editImages" class="main-data-button mt-4">Edytuj zdjęcia</button>
+          <button @click="editImages" class="main-data-button w-44 mt-4">Edytuj zdjęcia</button>
         </div>
         <div class="flex flex-row items-center justify-center sm:justify-start flex-wrap mt-2">
           <div
@@ -111,7 +111,6 @@ export default {
     }
   },
   async created(){
-    console.log(this.imagesProp)
     if(!this.ISjwt){
       this.$router.push('/login')
     }

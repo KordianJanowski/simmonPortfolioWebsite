@@ -1,7 +1,7 @@
 <template>
   <div>
     <Navbar />
-    <div class="h-full max-w-4xl mt-32 mx-auto flex flex-col">
+    <div v-if="!isPhotoLayerVisible" class="h-full max-w-4xl mt-32 mx-auto flex flex-col">
       <div class="w-4/5 mx-auto bg-gray-700 rounded shadow-md px-10 py-7">
         <h2 class="text-4xl">{{ $t("gallery.code") }}: <span class="font-bold text-blue-400">{{ gallery.code }}</span></h2>
         <hr class="my-4 border-gray-600">
@@ -20,11 +20,11 @@
         </div>
       </div>
       <div class="flex flex-row flex-wrap justify-center m-10">
-        <div
+        <button
           v-for="(image, index) in gallery.images"
           :key="index"
-          class="bg-cover bg-no-repeat bg-center grid-cols-1 m-2 h-64 w-96
-            flex flex-col relative"
+          @click="toggleShowPhotoLayer(image)"
+          class="bg-cover bg-no-repeat bg-center grid-cols-1 m-2 h-64 w-96 flex flex-col relative shadow-md rounded-md"
           :style="{ backgroundImage: 'url(' + image + ')' }"
         >
           <a :href="image" class="bg-gray-700 p-2 rounded shadow-md absolute right-4 bottom-4 hover:bg-gray-600" @click.prevent="downloadSingleImage(image, index)">
@@ -32,14 +32,20 @@
               <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
             </svg>
           </a>
-        </div>
+        </button>
       </div>
     </div>
+    <PhotoLayer
+      v-else
+      :imagePropString="this.imageToLayer"
+      @toggle-show-photo-layer="toggleShowPhotoLayer"
+    />
     <Footer />
   </div>
 </template>
 <script>
 import Navbar from '../components/Navbar.vue'
+import PhotoLayer from '../components/PhotoLayer.vue'
 import Footer from '../components/Footer.vue'
 
 import API_URL from '../API_URL'
@@ -52,7 +58,10 @@ export default {
     return {
       gallery: {},
       numberOfImages: 0,
-      expirationDate: ''
+      expirationDate: '',
+
+      imageToLayer: {},
+      isPhotoLayerVisible: false,
     }
   },
   props: {
@@ -60,6 +69,7 @@ export default {
   },
   components: {
     Navbar,
+    PhotoLayer,
     Footer,
   },
   async created() {
@@ -111,6 +121,10 @@ export default {
         }).catch(console.error)
       })
     },
+    toggleShowPhotoLayer(image) {
+      this.isPhotoLayerVisible = !this.isPhotoLayerVisible
+      this.imageToLayer = image
+    }
   }
 }
 </script>

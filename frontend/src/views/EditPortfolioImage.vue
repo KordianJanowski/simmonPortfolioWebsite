@@ -18,7 +18,7 @@
             class="bg-gray-800 w-full sm:w-2/3 p-3 rounded-md shadow-md"
             @change="onFileChange($event)"
           >
-          <button @click="editImage" class="main-data-button mt-4">Edytuj zdjęcie</button>
+          <button @click="editImage" class="main-data-button w-44 mt-4">Edytuj zdjęcie</button>
         </div>
 
         <div class="flex flex-col mt-5">
@@ -50,7 +50,7 @@
             cols="20"
             rows="10"
           ></textarea>
-          <button @click="editDescription" class="main-data-button mt-4">Edytuj opis</button>
+          <button @click="editDescription" class="main-data-button w-44 mt-4">Edytuj opis</button>
         </div>
 
         <input
@@ -104,6 +104,8 @@ export default {
     if(!this.ISjwt){
       this.$router.push('/login')
     }
+
+    console.log(this.portfolioId)
 
     if(!this.imageProp || !this.description) {
       this.$router.push('/panel')
